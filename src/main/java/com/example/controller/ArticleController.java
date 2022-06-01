@@ -2,6 +2,7 @@ package com.example.controller;
 
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,6 +48,9 @@ public class ArticleController {
 	
 	@RequestMapping("/add")
 	public String insertArticle(ArticleForm form, Model model) {
-		
+		Article article = new Article();
+		BeanUtils.copyProperties(form, article);
+		articleService.insert(article);
+		return "redirect:/article/list";
 	}
 }

@@ -23,7 +23,19 @@ public class ArticleService {
 	@Autowired
 	private ArticleRepository articleRepository;
 	
+	/**
+	 * 全件記事情報を取得する.
+	 * @return
+	 */
 	public List<Article> fillAll(){
 		return articleRepository.fillAll();
+	}
+	
+	/**
+	 * 記事情報を投稿する.
+	 * @param article
+	 */
+	public void insert(Article article) {
+		articleRepository.insert(article);
 	}
 }
