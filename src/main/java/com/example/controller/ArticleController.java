@@ -5,9 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.domain.Article;
+import com.example.form.ArticleForm;
 import com.example.service.ArticleService;
 
 /**
@@ -23,6 +25,11 @@ public class ArticleController {
 
 	@Autowired
 	private ArticleService articleService;
+	
+	@ModelAttribute
+	public ArticleForm setUpForm() {
+		return new ArticleForm();
+	}
 
 	/**
 	 * 記事情報一覧を出力する処理を行う.
@@ -38,6 +45,8 @@ public class ArticleController {
 		return "article/article-list";
 	}
 	
-//	@RequestMapping("/detail")
-//	public String 
+	@RequestMapping("/add")
+	public String insertArticle(ArticleForm form, Model model) {
+		
+	}
 }

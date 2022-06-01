@@ -5,8 +5,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<form th:action="@{article/add-article}" method="post">
-		
+	<form th:action="@{article/add}" th:object="${articleForm}" method="post">
+		投稿者名： <input type="text" name="name" th:field="*{name}">
+		投稿内容： <textarea rows="70" cols="100" name="content" th:field="*{content}"></textarea>
 	</form>
 	
 	<div th:each="article: ${articleList}">
