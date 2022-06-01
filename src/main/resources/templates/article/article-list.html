@@ -5,6 +5,10 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<form th:action="@{article/add-article}" method="post">
+		
+	</form>
+	
 	<div th:each="article: ${articleList}">
 		投稿者名： <span th:text="${article.name}"></span><br>
 		投稿内容：  <span th:text="${article.content}"></span>
