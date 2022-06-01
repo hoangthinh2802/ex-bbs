@@ -40,7 +40,7 @@ public class ArticleRepository {
 	 */
 	public List<Article> fillAll(){
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT id, name,content FROM" + TABLE_ARTICLES + " ORDER BY id");
+		sql.append("SELECT id, name,content FROM " + TABLE_ARTICLES + " ORDER BY id");
 		
 		List<Article> articleList = template.query(sql.toString(), ARTICLE_ROW_MAPPER);
 		return articleList;
