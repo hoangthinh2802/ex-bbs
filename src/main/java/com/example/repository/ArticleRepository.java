@@ -5,13 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import com.example.domain.Article;
-import com.example.domain.Comment;
 
 /**
  * 記事の情報を扱うリポジトリ.
@@ -29,9 +27,10 @@ public class ArticleRepository {
 	/** DBテーブルネーム */
 	private static final String TABLE_ARTICLES = "articles";
 
+	/**
+	 * 記事情報のローマッパー.
+	 */
 	private static final RowMapper<Article> ARTICLE_ROW_MAPPER = (rs, i) -> {
-		
-		
 		Article article = new Article();
 		article.setId(rs.getInt("id"));
 		article.setName(rs.getString("name"));
@@ -40,17 +39,6 @@ public class ArticleRepository {
 		return article;
 	};
 	
-	private static final RowMapper<Comment> COMMENT_ROW_MAPPER = (rs, i) -> {
-		Comment comment = new Comment();
-		comment.setId(rs.getInt("id"));
-		comment.setName(rs.getString("name"));
-		comment.setContent(rs.getString("content"));
-		comment.setArticleId(rs.getInt("article_id"));
-	
-		return comment;
-	};
-	
-
 	/**
 	 * 記事情報をID順で全件取得する.
 	 * 
@@ -67,8 +55,6 @@ public class ArticleRepository {
 		return articleList;
 	}
 	
-
-
 	/**
 	 * 記事情報を登録する.
 	 * 

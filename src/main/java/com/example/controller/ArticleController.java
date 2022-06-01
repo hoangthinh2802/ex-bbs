@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.domain.Article;
+import com.example.domain.Comment;
 import com.example.form.ArticleForm;
+import com.example.form.CommentForm;
 import com.example.service.ArticleService;
+import com.example.service.CommentService;
 
 /**
  * 記事情報を扱うコントローラ
@@ -26,10 +29,18 @@ public class ArticleController {
 
 	@Autowired
 	private ArticleService articleService;
-	
+
+	@Autowired
+	private CommentService commentService;
+
 	@ModelAttribute
 	public ArticleForm setUpForm() {
 		return new ArticleForm();
+	}
+
+	@ModelAttribute
+	public CommentForm setUpCommentForm() {
+		return new CommentForm();
 	}
 
 	/**
@@ -41,16 +52,43 @@ public class ArticleController {
 	@RequestMapping("/list")
 	public String index(Model model) {
 		List<Article> articleList = articleService.fillAll();
-		model.addAttribute("articleList", articleList);
+		for (Article article : articleList) {
+			article.setCommentList(commentService.findByArticleID(article.getId()));
+		}
 
+		model.addAttribute("articleList", articleList);
 		return "article/article-list";
 	}
-	
+
+	/**
+	 * 記事情報を投稿する.
+	 * 
+	 * @param form
+	 * @param model
+	 * @return 記事情報一覧画面
+	 */
 	@RequestMapping("/add")
 	public String insertArticle(ArticleForm form, Model model) {
 		Article article = new Article();
 		BeanUtils.copyProperties(form, article);
 		articleService.insert(article);
+		return "redirect:/article/list";
+	}
+
+	/**
+	 * コメントを投稿する.
+	 * 
+	 * @param form
+	 * @param model
+	 * @return 記事情報一覧画面
+	 */
+	@RequestMapping("/comment")
+	public String insertComment(CommentForm form, Model model) {
+		System.out.println(form);
+		Comment comment = new Comment();
+		BeanUtils.copyProperties(form, comment);
+		comment.setArticleId(Integer.parseInt(form.getArticleId()));
+		commentService.insert(comment);
 		return "redirect:/article/list";
 	}
 }

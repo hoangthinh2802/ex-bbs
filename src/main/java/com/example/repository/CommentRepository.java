@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -13,6 +14,7 @@ import com.example.domain.Comment;
 
 /**
  * コメントの情報を扱うリポジトリ
+ * 
  * @author hvthinh
  *
  */
@@ -24,7 +26,7 @@ public class CommentRepository {
 
 	/** DBテーブルネーム */
 	private static final String TABLE_COMMENTS = "comments";
-	
+
 	/**
 	 * コメントのローマッパー
 	 */
@@ -36,13 +38,32 @@ public class CommentRepository {
 		comment.setContent(rs.getString("content"));
 		return comment;
 	};
-	
-	public List<Comment> fillAllComment(Integer articleId){
+
+	/**
+	 * idでコメントリストを取得する.
+	 * 
+	 * @param articleId
+	 * @return コメントリスト
+	 */
+	public List<Comment> filndByArticleId(Integer articleId) {
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT id,name,content,article_id FROM " + TABLE_COMMENTS + " WHERE article_id =:articleId ORDER BY id");
+		sql.append("SELECT id,name,content,article_id FROM " + TABLE_COMMENTS
+				+ " WHERE article_id =:articleId ORDER BY id");
 		SqlParameterSource param = new MapSqlParameterSource().addValue("articleId", articleId);
-		
-		List<Comment> commentList =  template.query(sql.toString(), param,COMMENT_ROW_MAPPER);
+
+		List<Comment> commentList = template.query(sql.toString(), param, COMMENT_ROW_MAPPER);
 		return commentList;
+	}
+
+	/**
+	 * コメントを投稿する.
+	 * 
+	 * @param comment
+	 */
+	public void insert(Comment comment) {
+		SqlParameterSource param = new BeanPropertySqlParameterSource(comment);
+		StringBuilder sql = new StringBuilder();
+		sql.append("INSERT INTO " + TABLE_COMMENTS + "(name,content,article_id) VALUES(:name,:content,:articleId);");
+		template.update(sql.toString(), param);
 	}
 }
