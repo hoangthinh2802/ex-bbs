@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
@@ -20,7 +21,6 @@ import com.example.domain.Article;
 @Repository
 public class ArticleRepository {
 
-
 	@Autowired
 	private NamedParameterJdbcTemplate template;
 
@@ -35,10 +35,10 @@ public class ArticleRepository {
 		article.setId(rs.getInt("id"));
 		article.setName(rs.getString("name"));
 		article.setContent(rs.getString("content"));
-		
+
 		return article;
 	};
-	
+
 	/**
 	 * 記事情報をID順で全件取得する.
 	 * 
@@ -47,14 +47,12 @@ public class ArticleRepository {
 	public List<Article> fillAll() {
 
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT id, name,content  FROM " + TABLE_ARTICLES
-				+ " ORDER BY id");
+		sql.append("SELECT id, name,content  FROM " + TABLE_ARTICLES + " ORDER BY id");
 		List<Article> articleList = template.query(sql.toString(), ARTICLE_ROW_MAPPER);
-
 
 		return articleList;
 	}
-	
+
 	/**
 	 * 記事情報を登録する.
 	 * 
@@ -65,5 +63,16 @@ public class ArticleRepository {
 		StringBuilder sql = new StringBuilder();
 		sql.append("INSERT INTO " + TABLE_ARTICLES + "(name,content) VALUES(:name,:content);");
 		template.update(sql.toString(), param);
+	}
+
+	/**
+	 * 記事情報を削除する.
+	 * 
+	 * @param id
+	 */
+	public void deleteById(Integer id) {
+		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
+		String sql = "DELETE FROM " + TABLE_ARTICLES + " WHERE id=:id";
+		template.update(sql, param);
 	}
 }

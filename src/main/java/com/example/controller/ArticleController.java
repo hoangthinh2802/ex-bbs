@@ -68,7 +68,7 @@ public class ArticleController {
 	 * @return 記事情報一覧画面
 	 */
 	@RequestMapping("/add")
-	public String insertArticle(ArticleForm form, Model model) {
+	public String insertArticle(ArticleForm form) {
 		Article article = new Article();
 		BeanUtils.copyProperties(form, article);
 		articleService.insert(article);
@@ -83,12 +83,24 @@ public class ArticleController {
 	 * @return 記事情報一覧画面
 	 */
 	@RequestMapping("/comment")
-	public String insertComment(CommentForm form, Model model) {
-		System.out.println(form);
+	public String insertComment(CommentForm form) {
 		Comment comment = new Comment();
 		BeanUtils.copyProperties(form, comment);
 		comment.setArticleId(Integer.parseInt(form.getArticleId()));
 		commentService.insert(comment);
+		return "redirect:/article/list";
+	}
+
+	/**
+	 * 記事情報を削除する.
+	 * 
+	 * @param articleId
+	 * @return 記事情報一覧画面
+	 */
+	@RequestMapping("/delete")
+	public String deleteArticle(String articleId) {
+		commentService.deleteByArticleId(Integer.parseInt(articleId));
+		articleService.deleteById(Integer.parseInt(articleId));
 		return "redirect:/article/list";
 	}
 }

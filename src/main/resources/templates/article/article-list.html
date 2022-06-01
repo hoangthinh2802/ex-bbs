@@ -20,6 +20,10 @@
 			<div th:each="comment : ${article.commentList}">
 				<p>コメント者名：　<span th:text="${comment.name}"></span></p>
 				<p>コメント内容：　<span th:text="${comment.content}"></span></p>
+				<form method="post" th:action="@{/article/delete}">
+				<input type="hidden" name="articleId" th:value="${article.id}">
+				<button>記事削除</button>
+				</form>
 			</div>
 			<form th:action="@{/article/comment}" th:object="${commentForm}"
 		method="post">

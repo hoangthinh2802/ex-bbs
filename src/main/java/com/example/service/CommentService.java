@@ -39,5 +39,9 @@ public class CommentService {
 	public void insert(Comment comment) {
 		commentRepository.insert(comment);
 	}
+	
+	public void deleteByArticleId(Integer articleId) {
+		commentRepository.deleteByArticleId(articleId);
+	}
 
 }

@@ -66,4 +66,16 @@ public class CommentRepository {
 		sql.append("INSERT INTO " + TABLE_COMMENTS + "(name,content,article_id) VALUES(:name,:content,:articleId);");
 		template.update(sql.toString(), param);
 	}
+
+	/**
+	 * 記事のIDコメントを削除する.
+	 * 
+	 * @param articleId
+	 */
+	public void deleteByArticleId(Integer articleId) {
+		System.out.println(articleId);
+		SqlParameterSource param = new MapSqlParameterSource().addValue("articleId", articleId);
+		String sql = "DELETE FROM " + TABLE_COMMENTS + " WHERE article_id=:articleId";
+		template.update(sql, param);
+	}
 }
